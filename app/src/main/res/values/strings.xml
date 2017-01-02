@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">ESP Light</string>
+    <string name="action_settings">Settings</string>
+
+    <!--ADD MODULE -->
+    <string name="add_module_searching">Searching for devices</string>
+    <string name="add_module_empty_message">No devices found. Make sure device and module are connected to the same wireless network or try adding module manually.</string>
+    <string name="refresh_button">Search Again</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_add">Add device manually</string>
+
+    <!--ADD MODULE DIALOG-->
+    <string name="confirm_title">Connection Information</string>
+    <string name="edittext_display_name">Display Name</string>
+    <string name="edittext_chip_id_hint">Chip ID</string>
+    <string name="edittext_ip">IP Address</string>
+    <string name="edittext_port">Port</string>
+    <string name="button_save">Save</string>
+    <string name="button_test">Test</string>
+    <string name="display_name_default">My Light</string>
+
+    <string name="edittext_mqtt_ip">MQTT IP Address</string>
+    <string name="edittext_mqtt_port">MQTT Port</string>
+
+
+
+</resources>
