@@ -9,8 +9,6 @@ import io.realm.annotations.PrimaryKey;
 
 public class LightModel extends RealmObject {
 
-    @PrimaryKey
-    private int id;
     private String name;
     private String ip;
     private int port;
@@ -22,14 +20,6 @@ public class LightModel extends RealmObject {
     private int brightness;
     private int mqttStatus;
     private String solidColor;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

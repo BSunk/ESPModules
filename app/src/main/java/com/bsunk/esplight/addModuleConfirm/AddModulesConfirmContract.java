@@ -15,6 +15,7 @@ public interface AddModulesConfirmContract {
     interface Presenter {
 
         void onItemClickModule(mDNSModule module);
+        void testConnection(String ipAddress, int port);
 
     }
 }

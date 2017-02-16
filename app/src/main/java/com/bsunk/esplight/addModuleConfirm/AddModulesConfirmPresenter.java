@@ -22,4 +22,8 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
         mView.setValues(module);
     }
 
+    public void testConnection(String ipAddress, int port) {
+
+    }
+
 }

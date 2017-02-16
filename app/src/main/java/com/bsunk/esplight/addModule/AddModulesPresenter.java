@@ -36,6 +36,7 @@ public class AddModulesPresenter implements AddModulesContract.Presenter, NsdHel
     }
 
     public void startDiscoveryTimeOut() {
+
         if(!nsdHelper.isDiscovery) {
             mView.resetList();
             mView.showEmptyMessage(false);

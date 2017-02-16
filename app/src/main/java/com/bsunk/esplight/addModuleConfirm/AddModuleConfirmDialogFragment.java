@@ -15,6 +15,7 @@ import com.bsunk.esplight.data.modules.AddModuleConfirmViewModule;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,12 +57,17 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
 
     public void setValues(mDNSModule module) {
         chipID.setText(module.getName());
-        IPAddress.setText(module.getIp());
+        IPAddress.setText(module.getIp().substring(1,module.getIp().length()));
         port.setText(String.valueOf(module.getPort()));
     }
 
     public void setName(String name) {
         displayName.setText(name);
+    }
+
+    @OnClick(R.id.buttonTest)
+    public void buttonTestOnClick() {
+        mPresenter.testConnection(IPAddress.getText().toString(), Integer.parseInt(port.getText().toString()));
     }
 
 }
