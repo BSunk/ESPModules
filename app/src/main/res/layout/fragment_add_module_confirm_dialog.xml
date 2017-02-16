@@ -1,97 +1,120 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@android:color/white"
-    android:orientation="vertical"
-
-    tools:context="com.bsunk.esplight.addModuleConfirm.AddModuleConfirmDialogFragment">
-
-    <android.support.design.widget.TextInputLayout
-        style="@style/EditTextConfirmConnection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/input_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/edittext_display_name" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        style="@style/EditTextConfirmConnection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/input_chipid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/edittext_chip_id_hint"/>
-
-    </android.support.design.widget.TextInputLayout>
-
+    android:layout_height="match_parent">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.TextInputLayout
-            style="@style/EditTextConfirmConnection"
-            android:layout_weight=".6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_ip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/edittext_ip"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            style="@style/EditTextConfirmConnection"
-            android:layout_weight=".4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_port"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/edittext_port"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/EditTextConfirmConnection"
-        android:gravity="center">
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        tools:context="com.bsunk.esplight.addModuleConfirm.AddModuleConfirmDialogFragment">
 
-        <Button
+        <android.support.design.widget.TextInputLayout
+            style="@style/EditTextConfirmConnection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/edittext_display_name" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/EditTextConfirmConnection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_chipid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/edittext_chip_id_hint"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/EditTextConfirmConnection"
+                android:layout_weight=".6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edittext_ip"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/EditTextConfirmConnection"
+                android:layout_weight=".4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/edittext_port"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/validationImageView"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_test"
-            android:id="@+id/buttonTest"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
+            android:layout_gravity="center"
+            style="@style/EditTextConfirmConnection">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/button_save"
-            android:id="@+id/buttonSave"
-            style="@style/Widget.AppCompat.Button.Colored"
-            />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_test"
+                android:id="@+id/buttonTest"
+                style="@style/Widget.AppCompat.Button.Colored"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/button_save"
+                android:id="@+id/buttonSave"
+                style="@style/Widget.AppCompat.Button.Colored"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
-
-</LinearLayout>
+</ScrollView>

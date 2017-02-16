@@ -10,12 +10,15 @@ public interface AddModulesConfirmContract {
     interface View {
         void setValues(mDNSModule module);
         void setName(String name);
+        void showValidation(boolean show);
+        void showProgressBar(boolean show);
     }
 
     interface Presenter {
 
         void onItemClickModule(mDNSModule module);
         void testConnection(String ipAddress, int port);
+        void onStop();
 
     }
 }
