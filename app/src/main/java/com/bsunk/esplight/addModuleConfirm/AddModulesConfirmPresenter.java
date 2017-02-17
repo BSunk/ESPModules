@@ -1,6 +1,7 @@
 package com.bsunk.esplight.addModuleConfirm;
 
 import com.bsunk.esplight.data.model.AllResponse;
+import com.bsunk.esplight.data.model.LightModel;
 import com.bsunk.esplight.data.model.mDNSModule;
 import com.bsunk.esplight.data.rest.ApiInterface;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -12,6 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -49,8 +51,14 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
                 .subscribeWith(onClickTestObserver()));
     }
 
-    public void saveConnection(mDNSModule module) {
-
+    public void saveConnection(final LightModel lightModel) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(lightModel);
+            }
+        });
     }
 
     private DisposableObserver<AllResponse> onClickTestObserver() {

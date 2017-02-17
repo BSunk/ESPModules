@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.components.DaggerAddModuleConfirmViewComponent;
+import com.bsunk.esplight.data.model.LightModel;
 import com.bsunk.esplight.data.model.mDNSModule;
 import com.bsunk.esplight.data.modules.AddModuleConfirmViewModule;
 import javax.inject.Inject;
@@ -82,7 +83,13 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
 
     @OnClick(R.id.buttonSave)
     public void saveButtonOnClick() {
-        mPresenter.saveConnection(module);
+        LightModel connection = new LightModel();
+        connection.setName(displayName.getText().toString());
+        connection.setIp(IPAddress.getText().toString());
+        connection.setPort(port.getText().toString());
+        connection.setChipID(chipID.getText().toString());
+
+        mPresenter.saveConnection(connection);
     }
 
     public void showValidation(boolean show) {

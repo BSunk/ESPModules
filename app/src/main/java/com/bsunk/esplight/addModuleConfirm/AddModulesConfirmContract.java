@@ -1,5 +1,6 @@
 package com.bsunk.esplight.addModuleConfirm;
 
+import com.bsunk.esplight.data.model.LightModel;
 import com.bsunk.esplight.data.model.mDNSModule;
 
 /**
@@ -18,7 +19,7 @@ public interface AddModulesConfirmContract {
 
         void onItemClickModule(mDNSModule module);
         void testConnection(String ipAddress, int port);
-        void saveConnection(mDNSModule module);
+        void saveConnection(LightModel module);
         void onStop();
 
     }

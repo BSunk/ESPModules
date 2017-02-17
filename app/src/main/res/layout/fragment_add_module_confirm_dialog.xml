@@ -32,6 +32,7 @@
                 android:id="@+id/input_chipid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="@string/edittext_chip_id_hint"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -62,6 +63,7 @@
 
                 <EditText
                     android:id="@+id/input_port"
+                    android:inputType="number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/edittext_port"/>

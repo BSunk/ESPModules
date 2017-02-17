@@ -1,5 +1,6 @@
 package com.bsunk.esplight.data.model;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -9,9 +10,12 @@ import io.realm.annotations.PrimaryKey;
 
 public class LightModel extends RealmObject {
 
+    @PrimaryKey
+    private String chipID;
+
     private String name;
     private String ip;
-    private int port;
+    private String port;
     private String mqttIP;
     private String mqttPort;
     private boolean power;
@@ -19,7 +23,9 @@ public class LightModel extends RealmObject {
     private int pattern;
     private int brightness;
     private int mqttStatus;
-    private String solidColor;
+    private int solidColorR;
+    private int solidColorG;
+    private int solidColorB;
 
     public String getName() {
         return name;
@@ -37,11 +43,11 @@ public class LightModel extends RealmObject {
         this.ip = ip;
     }
 
-    public int getPort() {
+    public String getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(String port) {
         this.port = port;
     }
 
@@ -101,12 +107,35 @@ public class LightModel extends RealmObject {
         this.mqttStatus = mqttStatus;
     }
 
-    public String getSolidColor() {
-        return solidColor;
+    public void setSolidColorR(int solidColorR) {
+        this.solidColorR = solidColorR;
     }
 
-    public void setSolidColor(String solidColor) {
-        this.solidColor = solidColor;
+    public int getSolidColorG() {
+        return solidColorG;
     }
 
+    public void setSolidColorG(int solidColorG) {
+        this.solidColorG = solidColorG;
+    }
+
+    public int getSolidColorB() {
+        return solidColorB;
+    }
+
+    public void setSolidColorB(int solidColorB) {
+        this.solidColorB = solidColorB;
+    }
+
+    public int getSolidColorR() {
+        return solidColorR;
+    }
+
+    public String getChipID() {
+        return chipID;
+    }
+
+    public void setChipID(String chipID) {
+        this.chipID = chipID;
+    }
 }
