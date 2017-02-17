@@ -18,6 +18,7 @@ public interface AddModulesConfirmContract {
 
         void onItemClickModule(mDNSModule module);
         void testConnection(String ipAddress, int port);
+        void saveConnection(mDNSModule module);
         void onStop();
 
     }

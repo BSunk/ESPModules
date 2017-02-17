@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
@@ -22,11 +22,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Presenter {
 
     AddModulesConfirmContract.View mView;
+    private CompositeDisposable disposables;
 
     @Inject
     AddModulesConfirmPresenter(AddModulesConfirmContract.View view) {
         mView = view;
-
+        disposables = new CompositeDisposable();
     }
 
     public void onItemClickModule(mDNSModule module) {
@@ -43,12 +44,16 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
         Observable<AllResponse> observable = apiInterface.requestAllData();
         mView.showProgressBar(true);
 
-        observable.subscribeOn(Schedulers.io())
+        disposables.add(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getTestObserver());
+                .subscribeWith(onClickTestObserver()));
     }
 
-    private DisposableObserver<AllResponse> getTestObserver() {
+    public void saveConnection(mDNSModule module) {
+
+    }
+
+    private DisposableObserver<AllResponse> onClickTestObserver() {
         return new DisposableObserver<AllResponse>() {
             @Override
             public void onNext(AllResponse result) {
@@ -70,7 +75,7 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
     }
 
     public void onStop() {
-
+        disposables.dispose();
     }
 
 }

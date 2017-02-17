@@ -41,6 +41,8 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    mDNSModule module;
+
     public AddModuleConfirmDialogFragment() {
         // Required empty public constructor
     }
@@ -55,7 +57,7 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
                 .build().inject(this);
 
         if(getActivity().getIntent().getParcelableExtra("module")!=null) {
-            mDNSModule module = getActivity().getIntent().getParcelableExtra("module");
+            module = getActivity().getIntent().getParcelableExtra("module");
             mPresenter.onItemClickModule(module);
         }
 
@@ -76,6 +78,11 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
     @OnClick(R.id.buttonTest)
     public void buttonTestOnClick() {
         mPresenter.testConnection(IPAddress.getText().toString(), Integer.parseInt(port.getText().toString()));
+    }
+
+    @OnClick(R.id.buttonSave)
+    public void saveButtonOnClick() {
+        mPresenter.saveConnection(module);
     }
 
     public void showValidation(boolean show) {
