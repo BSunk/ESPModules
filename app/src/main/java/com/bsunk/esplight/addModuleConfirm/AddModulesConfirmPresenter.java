@@ -25,11 +25,13 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
 
     AddModulesConfirmContract.View mView;
     private CompositeDisposable disposables;
+    Realm realm;
 
     @Inject
     AddModulesConfirmPresenter(AddModulesConfirmContract.View view) {
         mView = view;
         disposables = new CompositeDisposable();
+        realm = Realm.getDefaultInstance();
     }
 
     public void onItemClickModule(mDNSModule module) {
@@ -52,13 +54,14 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
     }
 
     public void saveConnection(final LightModel lightModel) {
-        Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.copyToRealm(lightModel);
             }
         });
+        mView.saveComplete();
+
     }
 
     private DisposableObserver<AllResponse> onClickTestObserver() {
@@ -84,6 +87,7 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
 
     public void onStop() {
         disposables.dispose();
+        realm.close();
     }
 
 }

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bsunk.esplight.App;
 import com.bsunk.esplight.R;
@@ -31,6 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -39,6 +42,7 @@ public class AddModuleFragment extends Fragment implements AddModulesContract.Vi
 
     private List<mDNSModule> modulesList = new ArrayList<>();
     private ModulesAdapter modulesAdapter;
+    static final int ADD_CONNECTION_REQUEST = 1;
 
     @Inject
     AddModulesPresenter mPresenter;
@@ -87,10 +91,22 @@ public class AddModuleFragment extends Fragment implements AddModulesContract.Vi
                 return true;
             case R.id.add:
                 Intent intent = new Intent(getActivity(), AddModuleConfirmDialogActivity.class);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent, ADD_CONNECTION_REQUEST);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == ADD_CONNECTION_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getContext(), "Added connection successfully", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -151,7 +167,8 @@ public class AddModuleFragment extends Fragment implements AddModulesContract.Vi
     public void onItemClick(mDNSModule module) {
         Intent intent = new Intent(getActivity(), AddModuleConfirmDialogActivity.class);
         intent.putExtra("module", module);
-        startActivity(intent);
+        //startActivity(intent);
+        startActivityForResult(intent, ADD_CONNECTION_REQUEST);
     }
 
 }

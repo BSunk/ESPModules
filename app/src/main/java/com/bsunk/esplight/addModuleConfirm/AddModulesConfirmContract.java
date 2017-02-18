@@ -13,6 +13,7 @@ public interface AddModulesConfirmContract {
         void setName(String name);
         void showValidation(boolean show);
         void showProgressBar(boolean show);
+        void saveComplete();
     }
 
     interface Presenter {

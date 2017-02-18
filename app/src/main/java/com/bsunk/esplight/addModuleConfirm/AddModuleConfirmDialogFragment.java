@@ -1,6 +1,8 @@
 package com.bsunk.esplight.addModuleConfirm;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -90,6 +92,11 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
         connection.setChipID(chipID.getText().toString());
 
         mPresenter.saveConnection(connection);
+    }
+
+    public void saveComplete() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
     }
 
     public void showValidation(boolean show) {
