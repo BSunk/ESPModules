@@ -14,8 +14,10 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 /**
  * Created by Bharat on 12/24/2016.
@@ -56,12 +58,18 @@ public class AddModulesConfirmPresenter implements AddModulesConfirmContract.Pre
     public void saveConnection(final LightModel lightModel) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
-                realm.copyToRealm(lightModel);
+            public void execute(Realm bgRealm) {
+                RealmQuery<LightModel> query = realm.where(LightModel.class);
+                query.equalTo("chipID", lightModel.getChipID());
+                if(query.findAll().isEmpty()) {
+                    realm.copyToRealm(lightModel);
+                    mView.saveComplete(true);
+                }
+                else {
+                    mView.showDuplicateMessage();
+                }
             }
         });
-        mView.saveComplete();
-
     }
 
     private DisposableObserver<AllResponse> onClickTestObserver() {

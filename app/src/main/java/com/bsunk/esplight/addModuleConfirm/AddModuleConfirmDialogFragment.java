@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.components.DaggerAddModuleConfirmViewComponent;
@@ -94,9 +95,18 @@ public class AddModuleConfirmDialogFragment extends Fragment implements AddModul
         mPresenter.saveConnection(connection);
     }
 
-    public void saveComplete() {
-        getActivity().setResult(Activity.RESULT_OK);
-        getActivity().finish();
+    public void saveComplete(boolean isSaved) {
+        if(isSaved) {
+            getActivity().setResult(Activity.RESULT_OK);
+            getActivity().finish();
+        }
+        else {
+            Toast.makeText(getContext(), "Error saving connection", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void showDuplicateMessage() {
+        Toast.makeText(getContext(), "Cannot save connection! ChipID already exists.", Toast.LENGTH_LONG).show();
     }
 
     public void showValidation(boolean show) {

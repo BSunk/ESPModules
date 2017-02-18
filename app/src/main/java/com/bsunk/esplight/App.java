@@ -22,8 +22,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        RealmConfiguration config = new RealmConfiguration.Builder(getApplicationContext()).build();
-        Realm.setDefaultConfiguration(config);
+        Realm.init(this);
 
         if(BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
