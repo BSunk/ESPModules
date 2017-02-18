@@ -33,6 +33,7 @@ public class AddModulesPresenter implements AddModulesContract.Presenter, NsdHel
         mView.initializeList();
         nsdHelper.initializeNsd();
         nsdHelper.registerCallback(this);
+        startDiscoveryTimeOut();
     }
 
     public void startDiscoveryTimeOut() {
@@ -121,12 +122,7 @@ public class AddModulesPresenter implements AddModulesContract.Presenter, NsdHel
                 });
     }
 
-    public void onResume() {
-        if (nsdHelper != null) {
-            startDiscoveryTimeOut();
-        }
-    }
-    public void onPause() {
+    public void onDestroy() {
         if (nsdHelper != null) {
             nsdHelper.stopDiscovery();
         }

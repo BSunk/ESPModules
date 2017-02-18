@@ -17,8 +17,7 @@ public interface AddModulesContract {
     }
 
     interface Presenter {
-        void onPause();
-        void onResume();
+        void onDestroy();
         void startDiscoveryTimeOut();
     }
 

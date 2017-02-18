@@ -150,18 +150,12 @@ public class AddModuleFragment extends Fragment implements AddModulesContract.Vi
     }
 
     @Override
-    public void onPause() {
-        mPresenter.onPause();
+    public void onDestroy() {
+        mPresenter.onDestroy();
         modulesList.clear();
         if(modulesAdapter!=null) {
-        modulesAdapter.notifyDataSetChanged(); }
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.onResume();
+            modulesAdapter.notifyDataSetChanged(); }
+        super.onDestroy();
     }
 
     public void onItemClick(mDNSModule module) {
