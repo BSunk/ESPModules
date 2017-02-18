@@ -91,7 +91,6 @@ public class AddModuleFragment extends Fragment implements AddModulesContract.Vi
                 return true;
             case R.id.add:
                 Intent intent = new Intent(getActivity(), AddModuleConfirmDialogActivity.class);
-                //startActivity(intent);
                 startActivityForResult(intent, ADD_CONNECTION_REQUEST);
                 return true;
             default:
@@ -161,7 +160,6 @@ public class AddModuleFragment extends Fragment implements AddModulesContract.Vi
     public void onItemClick(mDNSModule module) {
         Intent intent = new Intent(getActivity(), AddModuleConfirmDialogActivity.class);
         intent.putExtra("module", module);
-        //startActivity(intent);
         startActivityForResult(intent, ADD_CONNECTION_REQUEST);
     }
 

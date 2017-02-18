@@ -1,14 +1,12 @@
 package com.bsunk.esplight;
 
 import android.app.Application;
-import android.support.annotation.NonNull;
 
 import com.bsunk.esplight.data.components.DaggerNsdComponent;
 import com.bsunk.esplight.data.components.NsdComponent;
 import com.bsunk.esplight.data.modules.AppModule;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import timber.log.Timber;
 
 /**
