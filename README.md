@@ -7,4 +7,6 @@ ESP8266 hosts a web server + connects to a MQTT server(optional, for control out
 
 So far implemented: 
  - Search using mDNS for ESP8266 on wifi network.
- 
+ - Add connection to realm database
+ - View devices 
+ - BottomNavigation to go through pages
