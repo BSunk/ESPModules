@@ -17,5 +17,6 @@ public interface DeviceListContract {
     interface Presenter {
         void getDevices();
         void onDestroy();
+        void setBrightness(final String ip, final String port, final int brightness, final String chipID);
     }
 }

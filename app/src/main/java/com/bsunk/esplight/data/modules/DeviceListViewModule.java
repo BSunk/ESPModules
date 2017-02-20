@@ -19,7 +19,7 @@ public class DeviceListViewModule {
 
     @Provides
     @CustomScope
-    DeviceListContract.View providesMainScreenContractView() {
+    DeviceListContract.View providesDeviceListView() {
         return mView;
     }
 

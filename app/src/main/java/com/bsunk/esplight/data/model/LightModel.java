@@ -75,7 +75,7 @@ public class LightModel extends RealmObject {
         this.power = power;
     }
 
-    public boolean isConnectionCheck() {
+    public boolean getConnectionCheck() {
         return connectionCheck;
     }
 
