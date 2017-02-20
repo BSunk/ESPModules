@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bsunk.esplight.R;
@@ -18,7 +21,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
+import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.RealmViewHolder;
 import timber.log.Timber;
 
 /**
@@ -27,10 +34,9 @@ import timber.log.Timber;
 public class DeviceListFragment extends Fragment implements DeviceListContract.View {
 
     @BindView(R.id.recycler_view_device_list)
-    RecyclerView deviceListRV;
+    RealmRecyclerView deviceListRV;
 
     DeviceListPresenter mPresenter;
-    List<LightModel> mDeviceList;
     DeviceListAdapter mAdapter;
 
     public DeviceListFragment() {
@@ -38,26 +44,40 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter = new DeviceListPresenter(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_device_list, container, false);
         ButterKnife.bind(this, rootView);
-        mPresenter = new DeviceListPresenter(this);
         return rootView;
     }
 
     public void showDevices(RealmResults<LightModel> lightModels) {
-        mDeviceList = lightModels;
-        mAdapter=null;
-        mAdapter = new DeviceListAdapter(mClickListener);
+        mAdapter = new DeviceListAdapter(
+                getContext(),
+                lightModels,
+                true,
+                true,
+                null, mClickListener);
+
         deviceListRV.setAdapter(mAdapter);
-        deviceListRV.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
     public void onDestroy() {
         mPresenter.onDestroy();
         super.onDestroy();
+    }
+
+    public void updatedData() {
+        if (mAdapter!=null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     ClickListener mClickListener = new ClickListener() {
@@ -68,28 +88,46 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     };
 
 
-    public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListFragment.DeviceListAdapter.ViewHolder> {
+    public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
+            DeviceListAdapter.ViewHolder>  {
 
         private DeviceListFragment.ClickListener mItemListener;
+        private RealmResults<LightModel> mDeviceList;
 
-        public DeviceListAdapter(DeviceListFragment.ClickListener itemListener) {
+        public DeviceListAdapter(
+                Context context,
+                RealmResults<LightModel> realmResults,
+                boolean automaticUpdate,
+                boolean animateIdType,
+                String animateExtraColumnName,
+                DeviceListFragment.ClickListener itemListener) {
+            super(context, realmResults, automaticUpdate, animateIdType, animateExtraColumnName);
             mItemListener = itemListener;
+            mDeviceList = realmResults;
         }
 
         @Override
-        public DeviceListFragment.DeviceListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public DeviceListFragment.DeviceListAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
-            // Inflate the custom layout
             View roverView = inflater.inflate(R.layout.device_item, parent, false);
-            // Return a new holder instance
-            DeviceListFragment.DeviceListAdapter.ViewHolder viewHolder = new DeviceListFragment.DeviceListAdapter.ViewHolder(roverView, mItemListener);
-            return viewHolder;
+            return new DeviceListFragment.DeviceListAdapter.ViewHolder(roverView, mItemListener);
         }
 
         @Override
-        public void onBindViewHolder(DeviceListFragment.DeviceListAdapter.ViewHolder viewHolder, int position) {
-           viewHolder.name.setText(mDeviceList.get(position).getName());
+        public void onBindRealmViewHolder(DeviceListFragment.DeviceListAdapter.ViewHolder viewHolder, int position) {
+            double brightnessPercent = (mDeviceList.get(position).getBrightness()/255.0)*100;
+            viewHolder.name.setText(mDeviceList.get(position).getName());
+            viewHolder.brightness.setText(Math.round(brightnessPercent)+"%");
+            if(mDeviceList.get(position).isPower()) {
+                viewHolder.bulbIV.setColorFilter(getContext().getColor(R.color.bulb_on));
+                viewHolder.seekbar.setEnabled(true);
+                viewHolder.seekbar.setProgress((int) brightnessPercent);
+            }
+            else {
+                viewHolder.bulbIV.setColorFilter(getContext().getColor(R.color.bulb_off));
+                viewHolder.seekbar.setEnabled(false);
+            }
         }
 
 
@@ -102,15 +140,23 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
             return mDeviceList.get(position);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        class ViewHolder extends RealmViewHolder implements View.OnClickListener {
 
             TextView name;
+            TextView brightness;
+            SeekBar seekbar;
+            ImageView bulbIV;
+            ImageView connection;
             private DeviceListFragment.ClickListener mItemListener;
 
             ViewHolder(View itemView, DeviceListFragment.ClickListener listener) {
                 super(itemView);
                 mItemListener = listener;
                 name = (TextView) itemView.findViewById(R.id.device_name);
+                brightness = (TextView) itemView.findViewById(R.id.device_brightness);
+                seekbar = (SeekBar) itemView.findViewById(R.id.brightness_seekbar);
+                bulbIV = (ImageView) itemView.findViewById(R.id.imageView);
+                connection = (ImageView) itemView.findViewById(R.id.connection_iv);
                 itemView.setOnClickListener(this);
             }
 

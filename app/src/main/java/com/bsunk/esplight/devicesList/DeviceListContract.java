@@ -11,6 +11,7 @@ import io.realm.RealmResults;
 public interface DeviceListContract {
     interface View {
         void showDevices(RealmResults<LightModel> lightModels);
+        void updatedData();
     }
 
     interface Presenter {

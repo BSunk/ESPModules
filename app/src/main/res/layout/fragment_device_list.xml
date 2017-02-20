@@ -2,12 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.bsunk.esplight.devicesList.DeviceListFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
         android:id="@+id/recycler_view_device_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:rrvLayoutType="LinearLayout"
+        app:rrvIsRefreshable="true"
         />
 
 </FrameLayout>

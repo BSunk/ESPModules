@@ -9,5 +9,6 @@
     <color name="red">#c61b1b</color>
     <color name="green">#2f834e</color>
     <color name="white">#ffffff</color>
-    <color name="bulb_color">#d9b815</color>
+    <color name="bulb_off">#504307</color>
+    <color name="bulb_on">#d9b815</color>
 </resources>
