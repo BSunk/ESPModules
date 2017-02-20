@@ -12,11 +12,13 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
@@ -43,7 +45,6 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
         disposables = new CompositeDisposable();
         realm = Realm.getDefaultInstance();
         getDevices();
-
     }
 
     public void getDevices() {
@@ -57,6 +58,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
 
     public void onDestroy() {
         realm.close();
+        disposables.dispose();
     }
 
     private void updateData() {
@@ -94,9 +96,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
     }
 
     private void updateRealm(final AllResponse result, final String chipID) {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        realm.executeTransactionAsync(realm -> {
                 LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
                 updateObject.setConnectionCheck(true);
                 if(result.getPower()==0) {
@@ -108,62 +108,35 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 updateObject.setBrightness(result.getBrightness());
                 updateObject.setPattern(result.getCurrentPattern().getName());
                 realm.insertOrUpdate(updateObject);
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-               mView.updatedData();
-            }
-        });
+            }, () ->{mView.updatedData();});
     }
 
     private void updateRealmDeviceError(final String chipID) {
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        realm.executeTransactionAsync(realm -> {
                 LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
                 updateObject.setConnectionCheck(false);
                 realm.insertOrUpdate(updateObject);
-            }
-        }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                mView.updatedData();
-            }
-        });
+            }, () -> {mView.updatedData();});
     }
 
     public void setBrightness(final String ip, final String port, final int brightness, final String chipID) {
-        Single.fromCallable(new Callable<String>() {
-            @Override
-            public String call() {
-                return DeviceAccess.getInstance().setBrightness(ip, port, brightness);
-            }
-        })
+        disposables.add(DeviceAccess.getInstance().getSetBrightnessObservable(ip, port, brightness)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<String>() {
+                .subscribeWith(new DisposableObserver<String>() {
                     @Override
-                    public void onSubscribe(Disposable d) {}
-                    @Override
-                    public void onSuccess(final String result) {
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
-                                updateObject.setBrightness(Integer.parseInt(result));
-                                realm.insertOrUpdate(updateObject);
-                            }
-                        }, new Realm.Transaction.OnSuccess() {
-                            @Override
-                            public void onSuccess() {
-                                mView.updatedData();
-                            }
-                        });
+                    public void onNext(String result) {
+                        realm.executeTransactionAsync(realm -> {
+                            LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
+                            updateObject.setBrightness(Integer.parseInt(result));
+                            realm.insertOrUpdate(updateObject);
+                        }, () -> {mView.updatedData();});
                     }
                     @Override
-                    public void onError(Throwable error) {}
-                });
+                    public void onError(Throwable throwable) {}
+                    @Override
+                    public void onComplete() {}
+                }));
     }
 
 

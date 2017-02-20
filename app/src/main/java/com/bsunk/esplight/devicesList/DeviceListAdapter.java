@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.model.LightModel;
 
+import javax.inject.Inject;
+
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
@@ -25,17 +27,21 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
     private RealmResults<LightModel> mDeviceList;
     private Context mContext;
 
-    public DeviceListAdapter(
+    DeviceListPresenter mPresenter;
+
+    DeviceListAdapter(
             Context context,
             RealmResults<LightModel> realmResults,
             boolean automaticUpdate,
             boolean animateIdType,
             String animateExtraColumnName,
-            ClickListener itemListener) {
+            ClickListener itemListener,
+            DeviceListPresenter presenter) {
         super(context, realmResults, automaticUpdate, animateIdType, animateExtraColumnName);
         mItemListener = itemListener;
         mDeviceList = realmResults;
         mContext = context;
+        mPresenter = presenter;
     }
 
     @Override
@@ -87,10 +93,10 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-//                mPresenter.setBrightness(mDeviceList.get(position).getIp(),
-//                        mDeviceList.get(position).getPort(),
-//                        seekBar.getProgress(),
-//                        mDeviceList.get(position).getChipID());
+                mPresenter.setBrightness(mDeviceList.get(position).getIp(),
+                        mDeviceList.get(position).getPort(),
+                        seekBar.getProgress(),
+                        mDeviceList.get(position).getChipID());
             }
         });
     }
@@ -100,7 +106,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         return mDeviceList.size();
     }
 
-    public LightModel getItem(int position) {
+    private LightModel getItem(int position) {
         return mDeviceList.get(position);
     }
 

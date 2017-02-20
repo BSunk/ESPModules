@@ -1,12 +1,21 @@
 package com.bsunk.esplight.data.rest;
 
+
 import com.bsunk.esplight.data.components.DaggerNetComponent;
+import com.bsunk.esplight.data.model.LightModel;
+
 
 import java.io.IOException;
 
 import javax.inject.Inject;
-
 import io.reactivex.Observable;
+
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,33 +34,36 @@ public class DeviceAccess {
     private static DeviceAccess instance;
     private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public DeviceAccess() {
+    private DeviceAccess() {
         DaggerNetComponent.builder().build().inject(this);
     }
 
-//    public String setBrightness(String ip, String port, int brightness) {
-//
-//        String url = "http://"+ip+":"+port+"/brightness?value="+brightness;
-//        String json = "";
-//
-//        try {
-//            RequestBody body = RequestBody.create(JSON, json);
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .post(body)
-//                    .build();
-//            Response response = okHttpClient.newCall(request).execute();
-//            return response.body().string();
-//        }
-//        catch(IOException e) {
-//            return "";
-//        }
-//    }
+    public Observable<String> getSetBrightnessObservable(String ip, String port, int brightness) {
 
-    public Observable<Void> setBrightness(String ip, String port, int brightness) {
+        return Observable.create(e -> {
+            e.onNext(setBrightnessCall(ip, port, brightness));
+            e.onComplete();
+        });
 
+    }
 
+    private String setBrightnessCall(String ip, String port, int brightness) {
 
+        String url = "http://"+ip+":"+port+"/brightness?value="+brightness;
+        String json = "";
+
+        try {
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Response response = okHttpClient.newCall(request).execute();
+            return response.body().string();
+        }
+        catch(IOException e) {
+            return "";
+        }
     }
 
     public static DeviceAccess getInstance() {

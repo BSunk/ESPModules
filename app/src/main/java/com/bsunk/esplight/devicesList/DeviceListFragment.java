@@ -47,7 +47,7 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_device_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_device_list, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -58,7 +58,9 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
                 lightModels,
                 true,
                 true,
-                null, mClickListener);
+                null,
+                mClickListener,
+                mPresenter);
 
         deviceListRV.setAdapter(mAdapter);
     }
@@ -70,17 +72,12 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
     }
 
     public void updatedData() {
-        if (mAdapter!=null) {
+        if (mAdapter != null) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
-    ClickListener mClickListener = new ClickListener() {
-        @Override
-        public void onDeviceClick(LightModel clickedDevice, View v) {
-            Timber.v("Clicked");
-        }
-    };
+    ClickListener mClickListener = (clickedDevice, v) -> Timber.v("Clicked");
 
 }
 
