@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">ESP Light</string>
+    <string name="devices_tab">Devices</string>
+    <string name="add_device_tab">Add a Device</string>
+    <string name="settings_tab">Settings</string>
 
     <!--ADD MODULE -->
     <string name="add_module_searching">Searching for devices</string>

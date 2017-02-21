@@ -20,28 +20,29 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.devices_tab));
 
         DeviceListFragment deviceListFragment = new DeviceListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.content, deviceListFragment).commit();
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        bottomNavigationView.setOnNavigationItemSelectedListener(item ->  {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.action_devices:
                         fragment = new DeviceListFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                        getSupportActionBar().setTitle(getString(R.string.devices_tab));
                         break;
                     case R.id.action_add:
                         fragment = new AddModuleFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                        getSupportActionBar().setTitle(getString(R.string.add_device_tab));
                         break;
                     case R.id.action_settings:
+                        getSupportActionBar().setTitle(getString(R.string.settings_tab));
                         break;
                 }
                 return true;
-            }
         });
 
     }
