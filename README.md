@@ -21,3 +21,8 @@ Libraries Used:
  - Butterknife
  - Timber
  - Realm/RealmRecyclerView
+
+ ##Prelim Screenshots
+ <img src="/screenshots/Screenshot_20170220-211327.png" alt="image" width="400">
+ <img src="/screenshots/Screenshot_20170220-211337.png" alt="image" width="400">
+ <img src="/screenshots/Screenshot_20170220-211346.png" alt="image" width="400">
