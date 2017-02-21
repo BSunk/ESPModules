@@ -1,6 +1,5 @@
 package com.bsunk.esplight.data.model;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -138,4 +137,5 @@ public class LightModel extends RealmObject {
     public void setChipID(String chipID) {
         this.chipID = chipID;
     }
+
 }

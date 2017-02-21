@@ -21,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addModuleConfirm.AddModuleConfirmDialogActivity"></activity>
+        <activity android:name=".addModuleConfirm.AddModuleConfirmDialogActivity" />
+        <activity android:name=".deviceDetails.DeviceDetailsActivity"></activity>
     </application>
 
 </manifest>

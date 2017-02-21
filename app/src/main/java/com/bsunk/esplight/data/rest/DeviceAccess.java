@@ -59,6 +59,13 @@ public class DeviceAccess {
         });
     }
 
+    public Observable<String> getSetPatternObservable(String ip, String port, int value) {
+        return Observable.create(e -> {
+            e.onNext(setPatternCall(ip, port, value));
+            e.onComplete();
+        });
+    }
+
     private String setBrightnessCall(String ip, String port, int brightness) {
         String url = "http://"+ip+":"+port+"/brightness?value="+brightness;
         String json = "";
@@ -79,6 +86,24 @@ public class DeviceAccess {
 
     private String setPowerCall(String ip, String port, int power) {
         String url = "http://"+ip+":"+port+"/power?value="+power;
+        String json = "";
+
+        try {
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Response response = okHttpClient.newCall(request).execute();
+            return response.body().string();
+        }
+        catch(IOException e) {
+            return "";
+        }
+    }
+
+    private String setPatternCall(String ip, String port, int pattern) {
+        String url = "http://"+ip+":"+port+"/pattern?value="+pattern;
         String json = "";
 
         try {

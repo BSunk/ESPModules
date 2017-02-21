@@ -112,8 +112,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
                 int brightness = (int) ((seekBar.getProgress()/100.0) *255);
                 mPresenter.setBrightness(lightModel.getIp(),
                         lightModel.getPort(),
-                        brightness,
-                        lightModel.getChipID());
+                        brightness, lightModel.getChipID());
             }
         });
     }
@@ -150,7 +149,6 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             LightModel lightModel = getItem(position);
             mItemListener.onDeviceClick(lightModel, v);
         }
-
     }
 }
 
