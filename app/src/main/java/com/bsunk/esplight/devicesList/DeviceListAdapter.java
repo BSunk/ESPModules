@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
+import timber.log.Timber;
 
 /**
  * Created by Bharat on 2/20/2017.
@@ -27,7 +28,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
     private RealmResults<LightModel> mDeviceList;
     private Context mContext;
 
-    DeviceListPresenter mPresenter;
+    DeviceListContract.Presenter mPresenter;
 
     DeviceListAdapter(
             Context context,
@@ -36,7 +37,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             boolean animateIdType,
             String animateExtraColumnName,
             ClickListener itemListener,
-            DeviceListPresenter presenter) {
+            DeviceListContract.Presenter presenter) {
         super(context, realmResults, automaticUpdate, animateIdType, animateExtraColumnName);
         mItemListener = itemListener;
         mDeviceList = realmResults;
@@ -93,9 +94,10 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                int brightness = (int) ((seekBar.getProgress()/100.0) *255);
                 mPresenter.setBrightness(mDeviceList.get(position).getIp(),
                         mDeviceList.get(position).getPort(),
-                        seekBar.getProgress(),
+                        brightness,
                         mDeviceList.get(position).getChipID());
             }
         });

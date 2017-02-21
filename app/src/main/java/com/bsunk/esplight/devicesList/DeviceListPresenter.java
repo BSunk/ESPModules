@@ -44,7 +44,6 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
         mView = view;
         disposables = new CompositeDisposable();
         realm = Realm.getDefaultInstance();
-        getDevices();
     }
 
     public void getDevices() {
