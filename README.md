@@ -10,3 +10,19 @@ So far implemented:
  - Add connection to realm database
  - View devices 
  - BottomNavigation to go through pages
+ - Brightness slider and power off/on
+
+
+Libraries Used:
+ - RxJava2
+ - Dagger2
+ - Retrolambda
+ - Retrofit2
+ - Butterknife
+ - Timber
+ - Realm/RealmRecyclerView
+
+ ##Prelim Screenshots
+ <img src="/screenshots/Screenshot_20170220-211327.png" alt="image" width="400">
+ <img src="/screenshots/Screenshot_20170220-211337.png" alt="image" width="400">
+ <img src="/screenshots/Screenshot_20170220-211346.png" alt="image" width="400">
