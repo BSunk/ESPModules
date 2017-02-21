@@ -11,12 +11,13 @@ import io.realm.RealmResults;
 public interface DeviceListContract {
     interface View {
         void showDevices(RealmResults<LightModel> lightModels);
-        void updatedData();
+        void setRefreshing(boolean isRefreshing);
     }
 
     interface Presenter {
         void getDevices();
         void onDestroy();
         void setBrightness(final String ip, final String port, final int brightness, final String chipID);
+        void updateData();
     }
 }

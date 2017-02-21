@@ -39,16 +39,13 @@ public class DeviceAccess {
     }
 
     public Observable<String> getSetBrightnessObservable(String ip, String port, int brightness) {
-
         return Observable.create(e -> {
             e.onNext(setBrightnessCall(ip, port, brightness));
             e.onComplete();
         });
-
     }
 
     private String setBrightnessCall(String ip, String port, int brightness) {
-
         String url = "http://"+ip+":"+port+"/brightness?value="+brightness;
         String json = "";
 

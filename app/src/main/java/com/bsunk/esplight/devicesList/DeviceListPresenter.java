@@ -60,10 +60,12 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
         disposables.dispose();
     }
 
-    private void updateData() {
+    public void updateData() {
+        mView.setRefreshing(true);
         for(int i=0; i<devices.size(); i++) {
             updateDevice(devices.get(i).getIp(), devices.get(i).getPort(), devices.get(i).getChipID());
         }
+        mView.setRefreshing(false);
     }
 
     private void updateDevice(String ipAddress, String port, final String chipID) {
@@ -80,11 +82,11 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 .subscribeWith(new DisposableObserver<AllResponse>() {
                     @Override
                     public void onNext(AllResponse result) {
-                        updateRealm(result, chipID);
+                        updateDeviceOnRealm(result, chipID);
                     }
                     @Override
                     public void onError(Throwable e) {
-                        updateRealmDeviceError(chipID);
+                        updateDeviceOnRealmConnectionFailed(chipID);
                     }
 
                     @Override
@@ -94,7 +96,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 }));
     }
 
-    private void updateRealm(final AllResponse result, final String chipID) {
+    private void updateDeviceOnRealm(final AllResponse result, final String chipID) {
         realm.executeTransactionAsync(realm -> {
                 LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
                 updateObject.setConnectionCheck(true);
@@ -107,15 +109,15 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 updateObject.setBrightness(result.getBrightness());
                 updateObject.setPattern(result.getCurrentPattern().getName());
                 realm.insertOrUpdate(updateObject);
-            }, () ->{mView.updatedData();});
+            });
     }
 
-    private void updateRealmDeviceError(final String chipID) {
+    private void updateDeviceOnRealmConnectionFailed(final String chipID) {
         realm.executeTransactionAsync(realm -> {
                 LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
                 updateObject.setConnectionCheck(false);
                 realm.insertOrUpdate(updateObject);
-            }, () -> {mView.updatedData();});
+            });
     }
 
     public void setBrightness(final String ip, final String port, final int brightness, final String chipID) {
@@ -129,7 +131,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                             LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
                             updateObject.setBrightness(Integer.parseInt(result));
                             realm.insertOrUpdate(updateObject);
-                        }, () -> {mView.updatedData();});
+                        });
                     }
                     @Override
                     public void onError(Throwable throwable) {}

@@ -27,9 +27,7 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
 
     DeviceListAdapter mAdapter;
 
-    public DeviceListFragment() {
-        // Required empty public constructor
-    }
+    public DeviceListFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,12 +44,14 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
                 getContext(),
                 lightModels,
                 true,
-                true,
+                false,
                 null,
                 mClickListener,
                 mPresenter);
 
         deviceListRV.setAdapter(mAdapter);
+
+        deviceListRV.setOnRefreshListener(()-> mPresenter.updateData());
     }
 
     @Override
@@ -60,10 +60,8 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
         super.onDestroy();
     }
 
-    public void updatedData() {
-        if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
-        }
+    public void setRefreshing(boolean isRefreshing) {
+        deviceListRV.setRefreshing(isRefreshing);
     }
 
     ClickListener mClickListener = (clickedDevice, v) -> Timber.v("Clicked");
