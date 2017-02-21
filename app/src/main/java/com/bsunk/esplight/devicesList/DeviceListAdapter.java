@@ -13,6 +13,8 @@ import com.bsunk.esplight.data.model.LightModel;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
@@ -55,13 +57,17 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
     @Override
     public void onBindRealmViewHolder(DeviceListAdapter.ViewHolder viewHolder, final int position) {
-        double brightnessPercent = (mDeviceList.get(position).getBrightness()/255.0)*100;
-        viewHolder.name.setText(mDeviceList.get(position).getName());
-        viewHolder.seekbar.setProgress((int) brightnessPercent);
 
+        final LightModel lightModel = mDeviceList.get(position);
+
+        double brightnessPercent = (lightModel.getBrightness()/255.0)*100;
+
+        viewHolder.name.setText(lightModel.getName());
+        viewHolder.seekbar.setProgress((int) brightnessPercent);
+        viewHolder.pattern.setText(mContext.getString(R.string.pattern, lightModel.getPattern()));
         viewHolder.brightness.setText(Math.round(brightnessPercent)+"%");
 
-        if(mDeviceList.get(position).getConnectionCheck()) {
+        if(lightModel.getConnectionCheck()) {
             viewHolder.connection.setImageDrawable(mContext.getDrawable(R.drawable.ic_check_circle_black_24dp));
             viewHolder.connection.setColorFilter(getContext().getResources().getColor(R.color.green));
             viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_on));
@@ -74,7 +80,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             viewHolder.seekbar.setEnabled(false);
         }
 
-        if(mDeviceList.get(position).isPower()) {
+        if(lightModel.isPower()) {
             viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_on));
         }
         else {
@@ -82,15 +88,15 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         }
 
         viewHolder.bulbIV.setOnClickListener((view -> {
-            if(mDeviceList.get(position).isPower()) {
-                mPresenter.setPower(mDeviceList.get(position).getIp(),
-                        mDeviceList.get(position).getPort(),
-                        0, mDeviceList.get(position).getChipID());
+            if(lightModel.isPower()) {
+                mPresenter.setPower(lightModel.getIp(),
+                        lightModel.getPort(),
+                        0, lightModel.getChipID());
             }
             else {
-                mPresenter.setPower(mDeviceList.get(position).getIp(),
-                        mDeviceList.get(position).getPort(),
-                        1, mDeviceList.get(position).getChipID());
+                mPresenter.setPower(lightModel.getIp(),
+                        lightModel.getPort(),
+                        1, lightModel.getChipID());
             }
         }));
 
@@ -104,10 +110,10 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int brightness = (int) ((seekBar.getProgress()/100.0) *255);
-                mPresenter.setBrightness(mDeviceList.get(position).getIp(),
-                        mDeviceList.get(position).getPort(),
+                mPresenter.setBrightness(lightModel.getIp(),
+                        lightModel.getPort(),
                         brightness,
-                        mDeviceList.get(position).getChipID());
+                        lightModel.getChipID());
             }
         });
     }
@@ -123,21 +129,18 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
     class ViewHolder extends RealmViewHolder implements View.OnClickListener {
 
-        TextView name;
-        TextView brightness;
-        SeekBar seekbar;
-        ImageView bulbIV;
-        ImageView connection;
+        @BindView(R.id.brightness_seekbar) SeekBar seekbar;
+        @BindView(R.id.imageView) ImageView bulbIV;
+        @BindView(R.id.connection_iv) ImageView connection;
+        @BindView(R.id.device_name) TextView name;
+        @BindView(R.id.device_brightness) TextView brightness;
+        @BindView(R.id.device_pattern) TextView pattern;
         private ClickListener mItemListener;
 
         ViewHolder(View itemView, ClickListener listener) {
             super(itemView);
             mItemListener = listener;
-            name = (TextView) itemView.findViewById(R.id.device_name);
-            brightness = (TextView) itemView.findViewById(R.id.device_brightness);
-            seekbar = (SeekBar) itemView.findViewById(R.id.brightness_seekbar);
-            bulbIV = (ImageView) itemView.findViewById(R.id.imageView);
-            connection = (ImageView) itemView.findViewById(R.id.connection_iv);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

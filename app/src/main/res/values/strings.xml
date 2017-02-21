@@ -30,4 +30,6 @@
     <string name="connection_check_cd">Connection status</string>
     <string name="power_cd">Power status</string>
 
+    <string name="pattern">Pattern: %s</string>
+
 </resources>

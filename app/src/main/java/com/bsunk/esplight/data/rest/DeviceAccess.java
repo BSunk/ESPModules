@@ -38,6 +38,13 @@ public class DeviceAccess {
         DaggerNetComponent.builder().build().inject(this);
     }
 
+    public static DeviceAccess getInstance() {
+        if(instance==null) {
+            instance = new DeviceAccess();
+        }
+        return instance;
+    }
+
     public Observable<String> getSetBrightnessObservable(String ip, String port, int brightness) {
         return Observable.create(e -> {
             e.onNext(setBrightnessCall(ip, port, brightness));
@@ -86,13 +93,6 @@ public class DeviceAccess {
         catch(IOException e) {
             return "";
         }
-    }
-
-    public static DeviceAccess getInstance() {
-        if(instance==null) {
-            instance = new DeviceAccess();
-        }
-        return instance;
     }
 
 }
