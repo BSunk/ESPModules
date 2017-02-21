@@ -1,6 +1,5 @@
 package com.bsunk.esplight.devicesList;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,13 +9,11 @@ import android.view.ViewGroup;
 
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.model.LightModel;
-import com.bsunk.esplight.deviceDetails.DeviceDetailsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView;
 import io.realm.RealmResults;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +48,6 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
                 true,
                 false,
                 null,
-                mClickListener,
                 mPresenter);
 
         deviceListRV.setAdapter(mAdapter);
@@ -68,12 +64,6 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
         mPresenter.onDestroy();
         super.onDestroy();
     }
-
-    ClickListener mClickListener = (clickedDevice, v) -> {
-        Intent intent = new Intent(getActivity(), DeviceDetailsActivity.class);
-        intent.putExtra("chipID", clickedDevice.getChipID());
-        startActivity(intent);
-    };
 
 }
 

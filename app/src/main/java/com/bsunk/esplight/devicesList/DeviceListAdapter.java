@@ -26,7 +26,6 @@ import timber.log.Timber;
 
 public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel, DeviceListAdapter.ViewHolder> {
 
-    private ClickListener mItemListener;
     private RealmResults<LightModel> mDeviceList;
     private Context mContext;
 
@@ -38,10 +37,8 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             boolean automaticUpdate,
             boolean animateIdType,
             String animateExtraColumnName,
-            ClickListener itemListener,
             DeviceListContract.Presenter presenter) {
         super(context, realmResults, automaticUpdate, animateIdType, animateExtraColumnName);
-        mItemListener = itemListener;
         mDeviceList = realmResults;
         mContext = context;
         mPresenter = presenter;
@@ -52,7 +49,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View roverView = inflater.inflate(R.layout.device_item, parent, false);
-        return new DeviceListAdapter.ViewHolder(roverView, mItemListener);
+        return new DeviceListAdapter.ViewHolder(roverView);
     }
 
     @Override
@@ -126,7 +123,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         return mDeviceList.get(position);
     }
 
-    class ViewHolder extends RealmViewHolder implements View.OnClickListener {
+    class ViewHolder extends RealmViewHolder {
 
         @BindView(R.id.brightness_seekbar) SeekBar seekbar;
         @BindView(R.id.imageView) ImageView bulbIV;
@@ -134,21 +131,12 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         @BindView(R.id.device_name) TextView name;
         @BindView(R.id.device_brightness) TextView brightness;
         @BindView(R.id.device_pattern) TextView pattern;
-        private ClickListener mItemListener;
 
-        ViewHolder(View itemView, ClickListener listener) {
+        ViewHolder(View itemView) {
             super(itemView);
-            mItemListener = listener;
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            LightModel lightModel = getItem(position);
-            mItemListener.onDeviceClick(lightModel, v);
-        }
     }
 }
 
