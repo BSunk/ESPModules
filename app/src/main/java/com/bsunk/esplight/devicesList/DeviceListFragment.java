@@ -2,6 +2,7 @@ package com.bsunk.esplight.devicesList;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
 
     @BindView(R.id.recycler_view_device_list)
     RealmRecyclerView deviceListRV;
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     DeviceListContract.Presenter mPresenter;
 
@@ -51,17 +54,17 @@ public class DeviceListFragment extends Fragment implements DeviceListContract.V
 
         deviceListRV.setAdapter(mAdapter);
 
-        deviceListRV.setOnRefreshListener(()-> mPresenter.updateData());
+        swipeRefreshLayout.setOnRefreshListener(()-> {
+            swipeRefreshLayout.setRefreshing(true);
+            mPresenter.updateData();
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     @Override
     public void onDestroy() {
         mPresenter.onDestroy();
         super.onDestroy();
-    }
-
-    public void setRefreshing(boolean isRefreshing) {
-        deviceListRV.setRefreshing(isRefreshing);
     }
 
     ClickListener mClickListener = (clickedDevice, v) -> Timber.v("Clicked");

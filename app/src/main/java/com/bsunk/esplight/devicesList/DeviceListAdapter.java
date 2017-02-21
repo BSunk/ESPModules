@@ -81,17 +81,26 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_off));
         }
 
+        viewHolder.bulbIV.setOnClickListener((view -> {
+            if(mDeviceList.get(position).isPower()) {
+                mPresenter.setPower(mDeviceList.get(position).getIp(),
+                        mDeviceList.get(position).getPort(),
+                        0, mDeviceList.get(position).getChipID());
+            }
+            else {
+                mPresenter.setPower(mDeviceList.get(position).getIp(),
+                        mDeviceList.get(position).getPort(),
+                        1, mDeviceList.get(position).getChipID());
+            }
+        }));
+
         viewHolder.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 int brightness = (int) ((seekBar.getProgress()/100.0) *255);

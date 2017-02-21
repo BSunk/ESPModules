@@ -61,11 +61,9 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
     }
 
     public void updateData() {
-        mView.setRefreshing(true);
         for(int i=0; i<devices.size(); i++) {
             updateDevice(devices.get(i).getIp(), devices.get(i).getPort(), devices.get(i).getChipID());
         }
-        mView.setRefreshing(false);
     }
 
     private void updateDevice(String ipAddress, String port, final String chipID) {
@@ -88,11 +86,8 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                     public void onError(Throwable e) {
                         updateDeviceOnRealmConnectionFailed(chipID);
                     }
-
                     @Override
-                    public void onComplete() {
-
-                    }
+                    public void onComplete() {}
                 }));
     }
 
@@ -130,6 +125,29 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                         realm.executeTransactionAsync(realm -> {
                             LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
                             updateObject.setBrightness(Integer.parseInt(result));
+                            realm.insertOrUpdate(updateObject);
+                        });
+                    }
+                    @Override
+                    public void onError(Throwable throwable) {}
+                    @Override
+                    public void onComplete() {}
+                }));
+    }
+
+    public void setPower(final String ip, final String port, final int value, final String chipID) {
+        disposables.add(DeviceAccess.getInstance().getSetPowerObservable(ip, port, value)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(final String result) {
+                        realm.executeTransactionAsync(realm -> {
+                            LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
+                            if(result.equals("1")) {
+                                updateObject.setPower(true);
+                            }
+                            else {updateObject.setPower(false);}
                             realm.insertOrUpdate(updateObject);
                         });
                     }
