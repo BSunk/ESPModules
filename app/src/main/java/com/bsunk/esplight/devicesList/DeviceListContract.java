@@ -18,6 +18,7 @@ public interface DeviceListContract {
         void onDestroy();
         void setBrightness(final String ip, final String port, final int brightness, final String chipID);
         void setPower(final String ip, final String port, final int value, final String chipID);
+        void setPattern(final String ip, final String port, final int value, final String chipID);
         void updateData();
     }
 }

@@ -4,12 +4,21 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.model.LightModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -48,8 +57,8 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
     public DeviceListAdapter.ViewHolder onCreateRealmViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View roverView = inflater.inflate(R.layout.device_item, parent, false);
-        return new DeviceListAdapter.ViewHolder(roverView);
+        View view = inflater.inflate(R.layout.device_item, parent, false);
+        return new DeviceListAdapter.ViewHolder(view);
     }
 
     @Override
@@ -61,7 +70,6 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
         viewHolder.name.setText(lightModel.getName());
         viewHolder.seekbar.setProgress((int) brightnessPercent);
-        viewHolder.pattern.setText(mContext.getString(R.string.pattern, lightModel.getPattern()));
         viewHolder.brightness.setText(Math.round(brightnessPercent)+"%");
 
         if(lightModel.getConnectionCheck()) {
@@ -77,7 +85,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             viewHolder.seekbar.setEnabled(false);
         }
 
-        if(lightModel.isPower()) {
+        if(lightModel.getPower()) {
             viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_on));
         }
         else {
@@ -85,7 +93,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         }
 
         viewHolder.bulbIV.setOnClickListener((view -> {
-            if(lightModel.isPower()) {
+            if(lightModel.getPower()) {
                 mPresenter.setPower(lightModel.getIp(),
                         lightModel.getPort(),
                         0, lightModel.getChipID());
@@ -112,15 +120,39 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
                         brightness, lightModel.getChipID());
             }
         });
+
+        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+        List<String> patternList = new Gson().fromJson(lightModel.getPatternList(), listType);
+        if(patternList!=null) {
+            ArrayAdapter<String> patternAdapter = new ArrayAdapter<>(mContext, R.layout.spinner_item, patternList);
+            patternAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+            viewHolder.patternSpinner.setAdapter(patternAdapter);
+        }
+
+        viewHolder.patternSpinner.setSelection(lightModel.getPattern());
+
+        viewHolder.patternSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(lightModel.getPattern()!=i) {
+                    mPresenter.setPattern(lightModel.getIp(),
+                            lightModel.getPort(),
+                            i,
+                            lightModel.getChipID());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
+
     }
 
     @Override
     public int getItemCount() {
         return mDeviceList.size();
-    }
-
-    private LightModel getItem(int position) {
-        return mDeviceList.get(position);
     }
 
     class ViewHolder extends RealmViewHolder {
@@ -130,7 +162,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         @BindView(R.id.connection_iv) ImageView connection;
         @BindView(R.id.device_name) TextView name;
         @BindView(R.id.device_brightness) TextView brightness;
-        @BindView(R.id.device_pattern) TextView pattern;
+        @BindView(R.id.device_pattern_spinner) Spinner patternSpinner;
 
         ViewHolder(View itemView) {
             super(itemView);

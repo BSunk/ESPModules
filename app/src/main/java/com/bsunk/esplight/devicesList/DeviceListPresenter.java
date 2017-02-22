@@ -5,7 +5,10 @@ import com.bsunk.esplight.data.model.AllResponse;
 import com.bsunk.esplight.data.model.LightModel;
 import com.bsunk.esplight.data.rest.ApiInterface;
 import com.bsunk.esplight.data.rest.DeviceAccess;
+import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
+import org.json.JSONObject;
 
 import java.util.concurrent.Callable;
 
@@ -39,7 +42,6 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
     private RealmResults<LightModel> devices;
     private CompositeDisposable disposables;
 
-    @Inject
     DeviceListPresenter(DeviceListContract.View view) {
         mView = view;
         disposables = new CompositeDisposable();
@@ -93,26 +95,28 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
 
     private void updateDeviceOnRealm(final AllResponse result, final String chipID) {
         realm.executeTransactionAsync(realm -> {
-                LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
-                updateObject.setConnectionCheck(true);
-                if(result.getPower()==0) {
-                    updateObject.setPower(false);
-                }
-                else {
-                    updateObject.setPower(true);
-                }
-                updateObject.setBrightness(result.getBrightness());
-                updateObject.setPattern(result.getCurrentPattern().getName());
-                realm.insertOrUpdate(updateObject);
-            });
+            LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
+            updateObject.setConnectionCheck(true);
+            if(result.getPower()==0) {
+                updateObject.setPower(false);
+            }
+            else {
+                updateObject.setPower(true);
+            }
+            updateObject.setBrightness(result.getBrightness());
+            updateObject.setPattern(result.getCurrentPattern().getIndex());
+            Gson gson = new Gson();
+            updateObject.setPatternList(gson.toJson(result.getPatterns()));
+            realm.insertOrUpdate(updateObject);
+        });
     }
 
     private void updateDeviceOnRealmConnectionFailed(final String chipID) {
         realm.executeTransactionAsync(realm -> {
-                LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
-                updateObject.setConnectionCheck(false);
-                realm.insertOrUpdate(updateObject);
-            });
+            LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
+            updateObject.setConnectionCheck(false);
+            realm.insertOrUpdate(updateObject);
+        });
     }
 
     public void setBrightness(final String ip, final String port, final int brightness, final String chipID) {
@@ -149,6 +153,32 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                             }
                             else {updateObject.setPower(false);}
                             realm.insertOrUpdate(updateObject);
+                        });
+                    }
+                    @Override
+                    public void onError(Throwable throwable) {}
+                    @Override
+                    public void onComplete() {}
+                }));
+    }
+
+    public void setPattern(final String ip, final String port, final int value, final String chipID) {
+        disposables.add(DeviceAccess.getInstance().getSetPatternObservable(ip, port, value)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(final String result) {
+                        realm.executeTransactionAsync(realm -> {
+                            LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
+
+                            try {
+                                JSONObject obj = new JSONObject(result);
+                                updateObject.setPattern(obj.getInt("index"));
+                                realm.insertOrUpdate(updateObject);
+                            } catch (Throwable t) {
+                                Timber.v("Error parsing json string");
+                            }
                         });
                     }
                     @Override

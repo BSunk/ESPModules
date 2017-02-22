@@ -19,7 +19,8 @@ public class LightModel extends RealmObject {
     private String mqttPort;
     private boolean power;
     private boolean connectionCheck;
-    private String pattern;
+    private int pattern;
+    private String patternList;
     private int brightness;
     private int mqttStatus;
     private int solidColorR;
@@ -66,7 +67,7 @@ public class LightModel extends RealmObject {
         this.mqttPort = mqttPort;
     }
 
-    public boolean isPower() {
+    public boolean getPower() {
         return power;
     }
 
@@ -82,11 +83,11 @@ public class LightModel extends RealmObject {
         this.connectionCheck = connectionCheck;
     }
 
-    public String getPattern() {
+    public int getPattern() {
         return pattern;
     }
 
-    public void setPattern(String pattern) {
+    public void setPattern(int pattern) {
         this.pattern = pattern;
     }
 
@@ -138,4 +139,11 @@ public class LightModel extends RealmObject {
         this.chipID = chipID;
     }
 
+    public String getPatternList() {
+        return patternList;
+    }
+
+    public void setPatternList(String patternList) {
+        this.patternList = patternList;
+    }
 }
