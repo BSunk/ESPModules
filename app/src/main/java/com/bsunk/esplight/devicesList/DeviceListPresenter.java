@@ -11,6 +11,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import org.json.JSONObject;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -59,7 +60,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
 
     public void onDestroy() {
         realm.close();
-        disposables.dispose();
+        disposables.clear();
     }
 
     public void updateData() {
@@ -75,7 +76,8 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(ApiInterface.class);
 
-        Observable<AllResponse> observable = apiInterface.requestAllData();
+        Observable<AllResponse> observable = apiInterface.requestAllData()
+                .repeatWhen(completed -> completed.delay(5, TimeUnit.SECONDS));
 
         disposables.add(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -128,8 +130,10 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                     public void onNext(String result) {
                         realm.executeTransactionAsync(realm -> {
                             LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
-                            updateObject.setBrightness(Integer.parseInt(result));
-                            realm.insertOrUpdate(updateObject);
+                            if(!result.equals("")) {
+                                updateObject.setBrightness(Integer.parseInt(result));
+                                realm.insertOrUpdate(updateObject);
+                            }
                         });
                     }
                     @Override

@@ -77,12 +77,14 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             viewHolder.connection.setColorFilter(getContext().getResources().getColor(R.color.green));
             viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_on));
             viewHolder.seekbar.setEnabled(true);
+            viewHolder.patternSpinner.setEnabled(true);
         }
         else {
             viewHolder.connection.setImageDrawable(mContext.getDrawable(R.drawable.ic_error_black_24dp));
             viewHolder.connection.setColorFilter(getContext().getResources().getColor(R.color.red));
             viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_off));
             viewHolder.seekbar.setEnabled(false);
+            viewHolder.patternSpinner.setEnabled(false);
         }
 
         if(lightModel.getPower()) {
@@ -134,7 +136,6 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         viewHolder.patternSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 if(lightModel.getPattern()!=i) {
                     mPresenter.setPattern(lightModel.getIp(),
                             lightModel.getPort(),
@@ -146,8 +147,6 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
-
-
     }
 
     @Override
@@ -168,7 +167,6 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
     }
 }
 
