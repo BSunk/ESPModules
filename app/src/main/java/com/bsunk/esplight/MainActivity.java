@@ -1,25 +1,35 @@
 package com.bsunk.esplight;
 
+import android.animation.Animator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
 
 import com.bsunk.esplight.addModule.AddModuleFragment;
 import com.bsunk.esplight.devicesList.DeviceListFragment;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
     int selected=0;
 
+    @BindView(R.id.coordinator_layout) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.bottom_navigation) BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -53,18 +63,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToSelectedFragment(int selection) {
         Fragment fragment;
+        int startRadius = 0;
+        int endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
+        Animator anim;
+        int x,y;
         switch (selection) {
             case 0:
+                x = bottomNavigationView.getLeft();
+                y = bottomNavigationView.getBottom();
+                anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
+                anim.start();
+
                 fragment = new DeviceListFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
                 getSupportActionBar().setTitle(getString(R.string.devices_tab));
                 break;
             case 1:
+                 x = (bottomNavigationView.getRight()- bottomNavigationView.getLeft())/2;
+                 y = bottomNavigationView.getBottom();
+                startRadius = 0;
+                endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
+                anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
+                anim.start();
+
                 fragment = new AddModuleFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
                 getSupportActionBar().setTitle(getString(R.string.add_device_tab));
                 break;
             case 2:
+                x = bottomNavigationView.getRight();
+                y = bottomNavigationView.getBottom();
+                startRadius = 0;
+                endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
+                anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
+                anim.start();
+
                 getSupportActionBar().setTitle(getString(R.string.settings_tab));
                 break;
         }
