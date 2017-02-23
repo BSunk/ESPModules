@@ -12,6 +12,12 @@ So far implemented:
  - BottomNavigation to go through pages
  - Brightness slider and power off/on
  - Select color using color picker dialog
+ 
+Need to implement:
+ - Settings screen
+ - Phone events to trigger light using Broadcast Receiver
+ - MQTT for control anywhere
+ - Delete/Edit a connection
 
 Libraries Used:
  - RxJava2
