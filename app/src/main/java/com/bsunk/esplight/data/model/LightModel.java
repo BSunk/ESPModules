@@ -26,6 +26,7 @@ public class LightModel extends RealmObject {
     private int solidColorR;
     private int solidColorG;
     private int solidColorB;
+    private boolean eventIncomingCall;
 
     public String getName() {
         return name;
@@ -145,5 +146,13 @@ public class LightModel extends RealmObject {
 
     public void setPatternList(String patternList) {
         this.patternList = patternList;
+    }
+
+    public boolean isEventIncomingCall() {
+        return eventIncomingCall;
+    }
+
+    public void setEventIncomingCall(boolean eventIncomingCall) {
+        this.eventIncomingCall = eventIncomingCall;
     }
 }

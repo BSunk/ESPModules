@@ -42,6 +42,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
     private Realm realm;
     private RealmResults<LightModel> devices;
     private CompositeDisposable disposables;
+    private final int POLL_INTERVAL = 10;
 
     DeviceListPresenter(DeviceListContract.View view) {
         mView = view;
@@ -77,7 +78,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 .build().create(ApiInterface.class);
 
         Observable<AllResponse> observable = apiInterface.requestAllData()
-                .repeatWhen(completed -> completed.delay(8, TimeUnit.SECONDS));
+                .repeatWhen(completed -> completed.delay(POLL_INTERVAL, TimeUnit.SECONDS));
 
         disposables.add(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

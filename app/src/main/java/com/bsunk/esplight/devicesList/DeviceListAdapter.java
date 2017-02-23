@@ -140,11 +140,12 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
         viewHolder.patternSpinner.setSelection(lightModel.getPattern());
 
-        if(viewHolder.patternSpinner.getSelectedItem().toString().equals("Solid Color")) {
-            viewHolder.colorPickerButton.setVisibility(View.VISIBLE);
-        }
-        else {
-            viewHolder.colorPickerButton.setVisibility(View.GONE);
+        if(viewHolder.patternSpinner.getSelectedItem()!=null) {
+            if (viewHolder.patternSpinner.getSelectedItem().toString().equals("Solid Color")) {
+                viewHolder.colorPickerButton.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.colorPickerButton.setVisibility(View.GONE);
+            }
         }
 
         String hex = String.format("#%02x%02x%02x", lightModel.getSolidColorR(), lightModel.getSolidColorG(), lightModel.getSolidColorB());
@@ -171,9 +172,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
                     .initialColor(Color.parseColor(hex))
                     .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                     .density(8)
-                    .setOnColorSelectedListener(new OnColorSelectedListener() {
-                        @Override
-                        public void onColorSelected(int selectedColor) {
+                    .setOnColorSelectedListener(selectedColor -> {
                             int r = Color.red(selectedColor);
                             int g = Color.green(selectedColor);
                             int b = Color.blue(selectedColor);
@@ -181,7 +180,6 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
                                     lightModel.getPort(),
                                     r, g, b,
                                     lightModel.getChipID());
-                        }
                     })
                     .setPositiveButton("ok", (dialogInterface, i, integers) ->  {})
                     .lightnessSliderOnly()

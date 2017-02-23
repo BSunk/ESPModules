@@ -34,5 +34,11 @@
     <string name="power_cd">Power status</string>
 
     <string name="pattern">Pattern: </string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!--SETTINGS-->
+
+    <string name="settings_title_phone_events">Phone Events</string>
+    <string name="settings_header1">Select device</string>
 
 </resources>

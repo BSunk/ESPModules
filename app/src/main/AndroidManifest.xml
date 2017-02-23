@@ -3,6 +3,7 @@
     package="com.bsunk.esplight">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".App"
@@ -22,6 +23,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".addModuleConfirm.AddModuleConfirmDialogActivity" />
+
+        <receiver android:name=".broadcastReceivers.IncomingCall">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

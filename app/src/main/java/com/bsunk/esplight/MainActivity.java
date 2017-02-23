@@ -14,6 +14,7 @@ import android.view.ViewAnimationUtils;
 
 import com.bsunk.esplight.addModule.AddModuleFragment;
 import com.bsunk.esplight.devicesList.DeviceListFragment;
+import com.bsunk.esplight.settings.SettingsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(savedInstanceState!=null) {
             selected = savedInstanceState.getInt("selection");
-            goToSelectedFragment(selected);
+            goToSelectedFragment(selected, true);
         }
         else {
             getSupportActionBar().setTitle(getString(R.string.devices_tab));
@@ -55,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
                         selected=2;
                         break;
                 }
-            goToSelectedFragment(selected);
+            goToSelectedFragment(selected, false);
             return true;
         });
 
     }
 
-    private void goToSelectedFragment(int selection) {
+    private void goToSelectedFragment(int selection, boolean configChange) {
         Fragment fragment;
         int startRadius = 0;
         int endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
@@ -69,35 +70,40 @@ public class MainActivity extends AppCompatActivity {
         int x,y;
         switch (selection) {
             case 0:
-                x = bottomNavigationView.getLeft();
-                y = bottomNavigationView.getBottom();
-                anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
-                anim.start();
-
+                if(!configChange) {
+                    x = bottomNavigationView.getLeft();
+                    y = bottomNavigationView.getBottom();
+                    anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
+                    anim.start();
+                }
                 fragment = new DeviceListFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
                 getSupportActionBar().setTitle(getString(R.string.devices_tab));
                 break;
             case 1:
-                 x = (bottomNavigationView.getRight()- bottomNavigationView.getLeft())/2;
-                 y = bottomNavigationView.getBottom();
-                startRadius = 0;
-                endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
-                anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
-                anim.start();
-
+                if(!configChange) {
+                    x = (bottomNavigationView.getRight() - bottomNavigationView.getLeft()) / 2;
+                    y = bottomNavigationView.getBottom();
+                    startRadius = 0;
+                    endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
+                    anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
+                    anim.start();
+                }
                 fragment = new AddModuleFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
                 getSupportActionBar().setTitle(getString(R.string.add_device_tab));
                 break;
             case 2:
-                x = bottomNavigationView.getRight();
-                y = bottomNavigationView.getBottom();
-                startRadius = 0;
-                endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
-                anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
-                anim.start();
-
+                if(!configChange) {
+                    x = bottomNavigationView.getRight();
+                    y = bottomNavigationView.getBottom();
+                    startRadius = 0;
+                    endRadius = (int) Math.hypot(coordinatorLayout.getWidth(), coordinatorLayout.getHeight());
+                    anim = ViewAnimationUtils.createCircularReveal(coordinatorLayout, x, y, startRadius, endRadius);
+                    anim.start();
+                }
+                fragment = new SettingsFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
                 getSupportActionBar().setTitle(getString(R.string.settings_tab));
                 break;
         }
