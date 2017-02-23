@@ -23,6 +23,10 @@ Libraries Used:
  - Realm/RealmRecyclerView
 
  ##Prelim Screenshots
- <img src="/screenshots/Screenshot_20170222-142854.png" alt="image" width="400">
- <img src="/screenshots/Screenshot_20170220-211337.png" alt="image" width="400">
- <img src="/screenshots/Screenshot_20170220-211346.png" alt="image" width="400">
+ <img src="/screenshots/Screenshot_20170222-142854.png" alt="image" width="300">
+ <img src="/screenshots/Screenshot_20170220-211337.png" alt="image" width="300">
+ <img src="/screenshots/Screenshot_20170220-211346.png" alt="image" width="300">
+ 
+ <img src="/screenshots/Screenshot_20170222-182624.png" alt="image" width="300">
+ <img src="/screenshots/Screenshot_20170222-182630.png" alt="image" width="300">
+ <img src="/screenshots/Screenshot_20170222-182634.png" alt="image" width="300">
