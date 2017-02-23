@@ -12,7 +12,6 @@ So far implemented:
  - BottomNavigation to go through pages
  - Brightness slider and power off/on
 
-
 Libraries Used:
  - RxJava2
  - Dagger2
@@ -21,12 +20,12 @@ Libraries Used:
  - Butterknife
  - Timber
  - Realm/RealmRecyclerView
+ - ColorPicker
 
  ##Prelim Screenshots
  <img src="/screenshots/Screenshot_20170222-142854.png" alt="image" width="300">
  <img src="/screenshots/Screenshot_20170220-211337.png" alt="image" width="300">
  <img src="/screenshots/Screenshot_20170220-211346.png" alt="image" width="300">
- 
  <img src="/screenshots/Screenshot_20170222-182624.png" alt="image" width="300">
  <img src="/screenshots/Screenshot_20170222-182630.png" alt="image" width="300">
  <img src="/screenshots/Screenshot_20170222-182634.png" alt="image" width="300">
