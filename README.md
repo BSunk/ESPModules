@@ -11,6 +11,7 @@ So far implemented:
  - View devices 
  - BottomNavigation to go through pages
  - Brightness slider and power off/on
+ - Select color using color picker dialog
 
 Libraries Used:
  - RxJava2
