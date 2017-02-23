@@ -1,7 +1,7 @@
-package com.bsunk.esplight.data.components;
+package com.bsunk.esplight.di.components;
 
-import com.bsunk.esplight.data.modules.AppModule;
-import com.bsunk.esplight.data.modules.NsdModule;
+import com.bsunk.esplight.di.modules.AppModule;
+import com.bsunk.esplight.di.modules.NsdModule;
 import com.bsunk.esplight.helper.NsdHelper;
 
 import javax.inject.Singleton;

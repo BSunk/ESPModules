@@ -2,7 +2,6 @@ package com.bsunk.esplight.addModuleConfirm;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -15,10 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bsunk.esplight.R;
-import com.bsunk.esplight.data.components.DaggerAddModuleConfirmViewComponent;
+import com.bsunk.esplight.di.components.DaggerAddModuleConfirmViewComponent;
 import com.bsunk.esplight.data.model.LightModel;
 import com.bsunk.esplight.data.model.mDNSModule;
-import com.bsunk.esplight.data.modules.AddModuleConfirmViewModule;
+import com.bsunk.esplight.di.modules.AddModuleConfirmViewModule;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;

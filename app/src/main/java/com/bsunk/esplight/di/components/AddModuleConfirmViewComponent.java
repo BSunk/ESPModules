@@ -1,7 +1,7 @@
-package com.bsunk.esplight.data.components;
+package com.bsunk.esplight.di.components;
 
 import com.bsunk.esplight.addModuleConfirm.AddModuleConfirmDialogFragment;
-import com.bsunk.esplight.data.modules.AddModuleConfirmViewModule;
+import com.bsunk.esplight.di.modules.AddModuleConfirmViewModule;
 import com.bsunk.esplight.util.CustomScope;
 
 import dagger.Component;

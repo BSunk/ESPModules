@@ -1,6 +1,6 @@
-package com.bsunk.esplight.data.components;
+package com.bsunk.esplight.di.components;
 
-import com.bsunk.esplight.data.modules.NetModule;
+import com.bsunk.esplight.di.modules.NetModule;
 import com.bsunk.esplight.data.rest.DeviceAccess;
 
 import javax.inject.Singleton;

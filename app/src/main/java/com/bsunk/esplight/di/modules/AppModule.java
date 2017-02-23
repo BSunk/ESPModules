@@ -1,4 +1,4 @@
-package com.bsunk.esplight.data.modules;
+package com.bsunk.esplight.di.modules;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -8,7 +8,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.realm.Realm;
 
 /**
  * Created by Bharat on 12/18/2016.

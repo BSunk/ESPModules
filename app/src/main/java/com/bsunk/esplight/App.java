@@ -2,9 +2,9 @@ package com.bsunk.esplight;
 
 import android.app.Application;
 
-import com.bsunk.esplight.data.components.DaggerNsdComponent;
-import com.bsunk.esplight.data.components.NsdComponent;
-import com.bsunk.esplight.data.modules.AppModule;
+import com.bsunk.esplight.di.components.DaggerNsdComponent;
+import com.bsunk.esplight.di.components.NsdComponent;
+import com.bsunk.esplight.di.modules.AppModule;
 
 import io.realm.Realm;
 import timber.log.Timber;

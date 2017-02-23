@@ -1,4 +1,4 @@
-package com.bsunk.esplight.data.modules;
+package com.bsunk.esplight.di.modules;
 
 import com.bsunk.esplight.addModule.AddModulesContract;
 import com.bsunk.esplight.util.CustomScope;

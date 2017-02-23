@@ -18,9 +18,9 @@ import android.widget.Toast;
 import com.bsunk.esplight.App;
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.addModuleConfirm.AddModuleConfirmDialogActivity;
-import com.bsunk.esplight.data.components.DaggerAddModuleViewComponent;
+import com.bsunk.esplight.di.components.DaggerAddModuleViewComponent;
 import com.bsunk.esplight.data.model.mDNSModule;
-import com.bsunk.esplight.data.modules.AddModuleViewModule;
+import com.bsunk.esplight.di.modules.AddModuleViewModule;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;

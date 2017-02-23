@@ -1,4 +1,4 @@
-package com.bsunk.esplight.data.modules;
+package com.bsunk.esplight.di.modules;
 
 import android.app.Application;
 
