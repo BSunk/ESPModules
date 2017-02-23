@@ -6,12 +6,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:background="@android:color/white"
         android:orientation="vertical"
         tools:context="com.bsunk.esplight.addModuleConfirm.AddModuleConfirmDialogFragment">
 
         <android.support.design.widget.TextInputLayout
             style="@style/EditTextConfirmConnection"
+            android:textColorHint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -25,6 +25,7 @@
 
         <android.support.design.widget.TextInputLayout
             style="@style/EditTextConfirmConnection"
+            android:textColorHint="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -43,6 +44,7 @@
 
             <android.support.design.widget.TextInputLayout
                 style="@style/EditTextConfirmConnection"
+                android:textColorHint="@color/white"
                 android:layout_weight=".6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -58,6 +60,7 @@
             <android.support.design.widget.TextInputLayout
                 style="@style/EditTextConfirmConnection"
                 android:layout_weight=".4"
+                android:textColorHint="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 

@@ -77,7 +77,7 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                 .build().create(ApiInterface.class);
 
         Observable<AllResponse> observable = apiInterface.requestAllData()
-                .repeatWhen(completed -> completed.delay(5, TimeUnit.SECONDS));
+                .repeatWhen(completed -> completed.delay(8, TimeUnit.SECONDS));
 
         disposables.add(observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -107,8 +107,10 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
             }
             updateObject.setBrightness(result.getBrightness());
             updateObject.setPattern(result.getCurrentPattern().getIndex());
-            Gson gson = new Gson();
-            updateObject.setPatternList(gson.toJson(result.getPatterns()));
+            updateObject.setPatternList(new Gson().toJson(result.getPatterns()));
+            updateObject.setSolidColorR(result.getSolidColor().getR());
+            updateObject.setSolidColorG(result.getSolidColor().getG());
+            updateObject.setSolidColorB(result.getSolidColor().getB());
             realm.insertOrUpdate(updateObject);
         });
     }
@@ -179,6 +181,34 @@ public class DeviceListPresenter implements DeviceListContract.Presenter {
                             try {
                                 JSONObject obj = new JSONObject(result);
                                 updateObject.setPattern(obj.getInt("index"));
+                                realm.insertOrUpdate(updateObject);
+                            } catch (Throwable t) {
+                                Timber.v("Error parsing json string");
+                            }
+                        });
+                    }
+                    @Override
+                    public void onError(Throwable throwable) {}
+                    @Override
+                    public void onComplete() {}
+                }));
+    }
+
+    public void setSolidColor(final String ip, final String port, final int r, final int g, final int b, final String chipID) {
+        disposables.add(DeviceAccess.getInstance().getSetSolidColorObservable(ip, port, r, g, b)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(final String result) {
+                        realm.executeTransactionAsync(realm -> {
+                            LightModel updateObject = realm.where(LightModel.class).equalTo("chipID", chipID).findFirst();
+
+                            try {
+                                JSONObject obj = new JSONObject(result);
+                                updateObject.setSolidColorR(obj.getInt("r"));
+                                updateObject.setSolidColorG(obj.getInt("g"));
+                                updateObject.setSolidColorB(obj.getInt("b"));
                                 realm.insertOrUpdate(updateObject);
                             } catch (Throwable t) {
                                 Timber.v("Error parsing json string");

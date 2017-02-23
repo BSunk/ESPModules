@@ -22,7 +22,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".addModuleConfirm.AddModuleConfirmDialogActivity" />
-        <activity android:name=".deviceDetails.DeviceDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -1,11 +1,14 @@
 package com.bsunk.esplight.devicesList;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -13,6 +16,10 @@ import android.widget.TextView;
 
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.model.LightModel;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -133,6 +140,16 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
         viewHolder.patternSpinner.setSelection(lightModel.getPattern());
 
+        if(viewHolder.patternSpinner.getSelectedItem().toString().equals("Solid Color")) {
+            viewHolder.colorPickerButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            viewHolder.colorPickerButton.setVisibility(View.GONE);
+        }
+
+        String hex = String.format("#%02x%02x%02x", lightModel.getSolidColorR(), lightModel.getSolidColorG(), lightModel.getSolidColorB());
+        viewHolder.colorPickerButton.setBackgroundColor(Color.parseColor(hex));
+
         viewHolder.patternSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -143,10 +160,35 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
                             lightModel.getChipID());
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
+
+        viewHolder.colorPickerButton.setOnClickListener(view ->
+            ColorPickerDialogBuilder
+                    .with(mContext)
+                    .setTitle("Choose color")
+                    .initialColor(Color.parseColor(hex))
+                    .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                    .density(8)
+                    .setOnColorSelectedListener(new OnColorSelectedListener() {
+                        @Override
+                        public void onColorSelected(int selectedColor) {
+                            int r = Color.red(selectedColor);
+                            int g = Color.green(selectedColor);
+                            int b = Color.blue(selectedColor);
+                            mPresenter.setSolidColor(lightModel.getIp(),
+                                    lightModel.getPort(),
+                                    r, g, b,
+                                    lightModel.getChipID());
+                        }
+                    })
+                    .setPositiveButton("ok", (dialogInterface, i, integers) ->  {})
+                    .lightnessSliderOnly()
+                    .build()
+                    .show()
+        );
+
     }
 
     @Override
@@ -162,6 +204,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         @BindView(R.id.device_name) TextView name;
         @BindView(R.id.device_brightness) TextView brightness;
         @BindView(R.id.device_pattern_spinner) Spinner patternSpinner;
+        @BindView(R.id.device_color_picker) ImageView colorPickerButton;
 
         ViewHolder(View itemView) {
             super(itemView);

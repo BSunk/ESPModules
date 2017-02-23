@@ -19,6 +19,7 @@ public interface DeviceListContract {
         void setBrightness(final String ip, final String port, final int brightness, final String chipID);
         void setPower(final String ip, final String port, final int value, final String chipID);
         void setPattern(final String ip, final String port, final int value, final String chipID);
+        void setSolidColor(final String ip, final String port, final int r, final int g, final int b, final String chipID);
         void updateData();
     }
 }
