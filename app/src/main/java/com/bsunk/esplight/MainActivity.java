@@ -13,6 +13,8 @@ import com.bsunk.esplight.devicesList.DeviceListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    int selected=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,33 +22,56 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.devices_tab));
 
-        DeviceListFragment deviceListFragment = new DeviceListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content, deviceListFragment).commit();
+        if(savedInstanceState!=null) {
+            selected = savedInstanceState.getInt("selection");
+            goToSelectedFragment(selected);
+        }
+        else {
+            getSupportActionBar().setTitle(getString(R.string.devices_tab));
+            DeviceListFragment deviceListFragment = new DeviceListFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content, deviceListFragment).commit();
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item ->  {
-                Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.action_devices:
-                        fragment = new DeviceListFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
-                        getSupportActionBar().setTitle(getString(R.string.devices_tab));
+                        selected=0;
                         break;
                     case R.id.action_add:
-                        fragment = new AddModuleFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
-                        getSupportActionBar().setTitle(getString(R.string.add_device_tab));
+                        selected=1;
                         break;
                     case R.id.action_settings:
-                        getSupportActionBar().setTitle(getString(R.string.settings_tab));
+                        selected=2;
                         break;
                 }
-                return true;
+            goToSelectedFragment(selected);
+            return true;
         });
 
     }
 
+    private void goToSelectedFragment(int selection) {
+        Fragment fragment;
+        switch (selection) {
+            case 0:
+                fragment = new DeviceListFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                getSupportActionBar().setTitle(getString(R.string.devices_tab));
+                break;
+            case 1:
+                fragment = new AddModuleFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                getSupportActionBar().setTitle(getString(R.string.add_device_tab));
+                break;
+            case 2:
+                getSupportActionBar().setTitle(getString(R.string.settings_tab));
+                break;
+        }
+    }
 
+    public void onSaveInstanceState(Bundle bundle) {
+        bundle.putInt("selection", selected);
+    }
 
 }
