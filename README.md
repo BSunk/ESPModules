@@ -12,6 +12,7 @@ So far implemented:
  - BottomNavigation to go through pages
  - Brightness slider and power off/on
  - Select color using color picker dialog
+ - Select pattern for leds
  
 Need to implement:
  - Settings screen
