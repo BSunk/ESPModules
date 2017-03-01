@@ -1,14 +1,12 @@
 package com.bsunk.esplight.devicesList;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -16,9 +14,8 @@ import android.widget.TextView;
 
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.model.LightModel;
+import com.bsunk.makeglow.MakeGlow;
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
-import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,14 +24,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.RealmViewHolder;
-import timber.log.Timber;
 
 /**
  * Created by Bharat on 2/20/2017.
@@ -74,6 +69,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         final LightModel lightModel = mDeviceList.get(position);
 
         double brightnessPercent = (lightModel.getBrightness()/255.0)*100;
+        String hex = String.format("#%02x%02x%02x", lightModel.getSolidColorR(), lightModel.getSolidColorG(), lightModel.getSolidColorB());
 
         viewHolder.name.setText(lightModel.getName());
         viewHolder.seekbar.setProgress((int) brightnessPercent);
@@ -82,26 +78,27 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         if(lightModel.getConnectionCheck()) {
             viewHolder.connection.setImageDrawable(mContext.getDrawable(R.drawable.ic_check_circle_black_24dp));
             viewHolder.connection.setColorFilter(getContext().getResources().getColor(R.color.green));
-            viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_on));
+            viewHolder.lightBulbView.setGlowOff(false);
             viewHolder.seekbar.setEnabled(true);
             viewHolder.patternSpinner.setEnabled(true);
         }
         else {
             viewHolder.connection.setImageDrawable(mContext.getDrawable(R.drawable.ic_error_black_24dp));
             viewHolder.connection.setColorFilter(getContext().getResources().getColor(R.color.red));
-            viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_off));
+            viewHolder.lightBulbView.setGlowOff(true);
             viewHolder.seekbar.setEnabled(false);
             viewHolder.patternSpinner.setEnabled(false);
         }
 
         if(lightModel.getPower()) {
-            viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_on));
+            viewHolder.lightBulbView.setGlowOff(false);
+            setGlow(viewHolder, (int) brightnessPercent);
         }
         else {
-            viewHolder.bulbIV.setColorFilter(getContext().getResources().getColor(R.color.bulb_off));
+            viewHolder.lightBulbView.setGlowOff(true);
         }
 
-        viewHolder.bulbIV.setOnClickListener((view -> {
+        viewHolder.lightBulbView.setOnClickListener((view -> {
             if(lightModel.getPower()) {
                 mPresenter.setPower(lightModel.getIp(),
                         lightModel.getPort(),
@@ -127,6 +124,7 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
                 mPresenter.setBrightness(lightModel.getIp(),
                         lightModel.getPort(),
                         brightness, lightModel.getChipID());
+                setGlow(viewHolder, brightness);
             }
         });
 
@@ -143,12 +141,14 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
         if(viewHolder.patternSpinner.getSelectedItem()!=null) {
             if (viewHolder.patternSpinner.getSelectedItem().toString().equals("Solid Color")) {
                 viewHolder.colorPickerButton.setVisibility(View.VISIBLE);
+                viewHolder.lightBulbView.setGlowColor(Color.parseColor(hex));
+
             } else {
                 viewHolder.colorPickerButton.setVisibility(View.GONE);
+                viewHolder.lightBulbView.setGlowColor(getContext().getColor(R.color.bulb_on));
             }
         }
 
-        String hex = String.format("#%02x%02x%02x", lightModel.getSolidColorR(), lightModel.getSolidColorG(), lightModel.getSolidColorB());
         viewHolder.colorPickerButton.setBackgroundColor(Color.parseColor(hex));
 
         viewHolder.patternSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -189,15 +189,31 @@ public class DeviceListAdapter extends RealmBasedRecyclerViewAdapter<LightModel,
 
     }
 
+    private void setGlow(DeviceListAdapter.ViewHolder viewHolder, int brightness) {
+            viewHolder.lightBulbView.setGlowOff(false);
+            if(brightness>=0 && brightness<=20) {
+                viewHolder.lightBulbView.setGlowRadius(3);
+            }
+            else if(brightness>=21 && brightness<=50) {
+                viewHolder.lightBulbView.setGlowRadius(10);
+            }
+            else if(brightness>=51 && brightness<=75) {
+                viewHolder.lightBulbView.setGlowRadius(18);
+            }
+            else {
+                viewHolder.lightBulbView.setGlowRadius(25);
+            }
+    }
+
     @Override
     public int getItemCount() {
         return mDeviceList.size();
     }
 
     class ViewHolder extends RealmViewHolder {
-
+        @BindView(R.id.glowView)
+        MakeGlow lightBulbView;
         @BindView(R.id.brightness_seekbar) SeekBar seekbar;
-        @BindView(R.id.imageView) ImageView bulbIV;
         @BindView(R.id.connection_iv) ImageView connection;
         @BindView(R.id.device_name) TextView name;
         @BindView(R.id.device_brightness) TextView brightness;

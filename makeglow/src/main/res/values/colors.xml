@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_glow_color">#d9b815</color>
+    <color name="default_off_color">#000000</color>
+</resources>

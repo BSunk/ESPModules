@@ -41,4 +41,15 @@
     <string name="settings_title_phone_events">Phone Events</string>
     <string name="settings_header1">Select device</string>
 
+    <!--DIALOG FRAGMENT-->
+    <string name="event1">Incoming Call</string>
+    <string name="dismiss_df">Dismiss</string>
+    <string name="ok_df">OK</string>
+    <string name="title_df">Choose events to trigger device</string>
+
+    <string-array name="events">
+        <item>Incoming call</item>
+        <item>Incoming message</item>
+    </string-array>
+
 </resources>

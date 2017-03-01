@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MakeGlow">
+        <attr name="drawable" format="reference" />
+        <attr name="glowColor" format="color"/>
+        <attr name="glowRadius" format="integer"/>
+        <attr name="glowOff" format="boolean"/>
+        <attr name="glowOffColor" format="color"/>
+        <attr name="blurFilter" format="integer"/>
+    </declare-styleable>
+</resources>

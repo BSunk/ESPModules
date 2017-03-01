@@ -2,6 +2,7 @@ package com.bsunk.esplight.settings;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bsunk.esplight.R;
 import com.bsunk.esplight.data.model.LightModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +57,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
 
         private List<LightModel> devices;
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
+        public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             @BindView(R.id.device_name) TextView deviceName;
             @BindView(R.id.device_id) TextView deviceID;
@@ -62,6 +65,28 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
             public MyViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
+                view.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.title_df)
+                        .items(R.array.events)
+                        .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                                for(int i=0; i<text.length; i++) {
+                                    if(text[0].equals("Incoming call")) {
+                                        Timber.v("Incoming calls checked");
+                                    }
+                                }
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.ok_df)
+                        .negativeText(R.string.dismiss_df)
+                        .show();
             }
         }
 
@@ -73,7 +98,6 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.settings_device_listview_item, parent, false);
-
             return new MyViewHolder(itemView);
         }
 
@@ -88,6 +112,7 @@ public class SettingsFragment extends Fragment implements SettingsContract.View 
         public int getItemCount() {
             return devices.size();
         }
+
     }
 
 }
