@@ -19,6 +19,8 @@ Need to implement:
  - Phone events to trigger light using Broadcast Receiver
  - MQTT for control anywhere
  - Delete/Edit a connection
+ - JUnit tests of presenters
+ - Espresso tests
 
 Libraries Used:
  - RxJava2
