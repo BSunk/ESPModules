@@ -32,7 +32,7 @@ Libraries Used:
  - Realm/RealmRecyclerView
  - ColorPicker
 
- ##Prelim Screenshots
+ ## Prelim Screenshots
  <img src="/screenshots/Screenshot_20170222-142854.png" alt="image" width="300">
  <img src="/screenshots/Screenshot_20170220-211337.png" alt="image" width="300">
  <img src="/screenshots/Screenshot_20170220-211346.png" alt="image" width="300">
